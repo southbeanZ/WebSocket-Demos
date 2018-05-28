@@ -35,5 +35,7 @@ WebSocket是一种在单个TCP连接上进行全双工通讯的协议。
 
 ### 3.NodeJs搭建自己的WebSocket服务器
 为了在Node环境下搭建一个WebSocket服务器，需要借助npm模块，在本Demo中使用基础的[nodejs-websocket](https://www.npmjs.com/package/nodejs-websocket)。
+
 该模块的使用较为简单，通过`createServer`方法创建一个服务器，`listen`设定端口。具体使用可查看本demo中的server.js及官方文档。
+
 需要注意的是，该模块发送数据的方法`sendText`仅支持字符串，因此在使用中如果要传输JSON格式的数据需要进行序列化处理。
