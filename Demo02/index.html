@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>WebSocket demo02</title>
+  <style>
+    .green {
+      color: #0f0;
+    }
+    .red {
+      color: #f00;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" id="J_ipt">
+  <input type="button" value="send" id="J_btn_send">
+  <div id="J_content"></div>
+  <script src="socket.io.js"></script>
+  <script>
+    let content = document.getElementById('J_content'),
+        sendBtn = document.getElementById('J_btn_send'),
+        ipt = document.getElementById('J_ipt')
+    function showMessage(msg, type) {
+      className = type == 'message' ? 'default' 
+                  : type == 'enter' ? 'green' : 'red'
+      let ele = document.createElement('div')
+      ele.className = className
+      ele.innerHTML = msg
+      content.appendChild(ele)
+    }
+
+    const socket = io('ws://localhost:3000');
+    sendBtn.addEventListener('click', () => {
+      socket.emit('message', ipt.value)
+    })
+    socket.on('enter', (data) => {
+      showMessage(data, 'enter')
+    });
+    socket.on('message', (data) => {
+      showMessage(data, 'message')
+    })
+    socket.on('leave', (data) => {
+      showMessage(data, 'left')
+    })
+    
+  </script>
+</body>
+</html>
