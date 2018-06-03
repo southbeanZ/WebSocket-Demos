@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Demo03-俄罗斯方块对战版</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="g-con">
+    <h2>俄罗斯方块对战版</h2>
+    <div class="g-local">
+      <canvas class="m-area" id="J_local_game" width="300" height="600"></canvas>
+      <canvas class="m-next" id="J_local_next" width="120" height="120"></canvas>
+      <div class="m-note">
+        <p>游戏时间：<span id="J_local_time"></span></p>
+        <p>游戏分数：<span id="J_local_score"></span></p>
+      </div>
+    </div>
+    <div class="g-remote">
+      <canvas class="m-area" id="J_remote_game"></canvas>
+      <canvas class="m-next" id="J_remote_next"></canvas>
+      <div class="m-note">
+        <p>对方游戏时间：<span id="J_remote_time"></span></p>
+        <p>对方游戏分数：<span id="J_remote_score"></span></p>
+      </div>
+    </div>
+  </div>
+  <script src="js/square.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/local.js"></script>
+</body>
+</html>

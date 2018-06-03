@@ -2,7 +2,10 @@
 
 ### Socket.io简介
 - [Socket.io](https://socket.io/)是面向实时Web应用的JS库，主要基于WebSocket协议。
-- Socket.io要求服务端和客户端都使用该框架。在服务端可以通过npm安装模块并使用；在客户端需要引入官方提供的JS文件。可以从CDN获取最新的客户端代码。`<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>`
+- Socket.io要求服务端和客户端都使用该框架。在服务端可以通过npm安装模块并使用；在客户端需要引入官方提供的JS文件。可以从CDN获取最新的客户端代码。
+  ```
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+  ```
 
 ### 基本使用方法
 - 建立一个服务器
