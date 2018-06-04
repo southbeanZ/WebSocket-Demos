@@ -11,8 +11,10 @@ function Game(gameCtx, nextCtx, gameWidth, gameHeight) {
   this.gameWidth = gameWidth
   this.gameHeight = gameHeight
   this.squareDir = 0
-  this.squareCur = new Square(gameCtx, 3, 0, 0),
-  this.squareNext = new Square(nextCtx)
+  this.squareCur = this.generateSquare(gameCtx, 3, 0, 0)
+  this.squareNext = this.generateSquare(nextCtx)
+  // this.squareCur = new Square(gameCtx, 3, 0, 0)
+  // this.squareNext = new Square(nextCtx)
 
   // 初始化游戏区域， 0:无方块 1:运动中方块 2:静止方块
   this.gameData = []
@@ -22,6 +24,9 @@ function Game(gameCtx, nextCtx, gameWidth, gameHeight) {
       this.gameData[i][j] = 0
     }
   }
+
+  this.squareCur.renderView()
+  this.squareNext.renderView()
 }
 
 // 清除之前的游戏数据
@@ -41,7 +46,9 @@ Game.prototype.clearPrevView = function() {
 Game.prototype.canMove = function(nextDir, nextX, nextY) {
   for(let i = 0; i < this.squareCur.squareData[nextDir].length; i++) {
     for(let j = 0; j < this.squareCur.squareData[nextDir][0].length; j++) {
-      if(this.squareCur.squareData[nextDir][i][j] == 1) {
+      if(this.squareCur.squareData[nextDir][i][j] == 2) {
+        return false;
+      } else if(this.squareCur.squareData[nextDir][i][j] == 1) {
         if(nextX + j < 0 || nextX + j >= this.gameWidth) {
           return false;
         }
@@ -68,6 +75,15 @@ Game.prototype.moveDown = function() {
       }
     }
     this.squareCur.origin.y++
+    if(this.isBottom()) {
+      this.squareCur = this.squareNext
+      this.squareCur.origin.x = 3
+      this.squareCur.origin.y = 0
+      this.squareCur.ctx = this.gameCtx
+      this.squareCur.renderView()
+      this.squareNext = this.generateSquare(this.nextCtx)
+      this.renderNextView()     
+    }
     this.renderView()
   }
 }
@@ -86,6 +102,15 @@ Game.prototype.moveLeft = function() {
       }
     }
     this.squareCur.origin.x--
+    if(this.isBottom()) {
+      this.squareCur = this.squareNext
+      this.squareCur.origin.x = 3
+      this.squareCur.origin.y = 0
+      this.squareCur.ctx = this.gameCtx
+      this.squareCur.renderView()
+      this.squareNext = this.generateSquare(this.nextCtx)
+      this.renderNextView()
+    }
     this.renderView()
   }
 }
@@ -104,6 +129,15 @@ Game.prototype.moveRight = function() {
       }
     }
     this.squareCur.origin.x++
+    if(this.isBottom()) {
+      this.squareCur = this.squareNext
+      this.squareCur.origin.x = 3
+      this.squareCur.origin.y = 0
+      this.squareCur.ctx = this.gameCtx
+      this.squareCur.renderView()
+      this.squareNext = this.generateSquare(this.nextCtx)
+      this.renderNextView()
+    }
     this.renderView()
   }
 }
@@ -123,6 +157,15 @@ Game.prototype.rotate = function() {
         }
       }
     }
+    if(this.isBottom()) {
+      this.squareCur = this.squareNext
+      this.squareCur.origin.x = 3
+      this.squareCur.origin.y = 0
+      this.squareCur.ctx = this.gameCtx
+      this.squareCur.renderView()
+      this.squareNext = this.generateSquare(this.nextCtx)
+      this.renderNextView()
+    }
     this.renderView()
   }
 }
@@ -139,6 +182,50 @@ Game.prototype.renderView = function() {
       }
     }
   }
+}
+
+// 渲染下一个方块区域
+Game.prototype.renderNextView = function() {
+  this.nextCtx.clearRect(0, 0, 120, 120)
+  this.squareNext.renderView()
+}
+
+// 随机产生方块
+Game.prototype.generateSquare = function(ctx, x=0, y=0) {
+  let type = Math.floor(Math.random() * 7),
+      dir = Math.floor(Math.random() * 4)
+      squares = [Square1, Square2, Square3, Square4, Square5, Square6, Square7]
+  return new squares[type](ctx, x, y, dir);
+}
+
+// 判断是否着地
+Game.prototype.isBottom = function() {
+  let curX = this.squareCur.origin.x,
+      curY = this.squareCur.origin.y,
+      isBottom = false
+  for(let i = 0; i < this.squareCur.squareData[this.squareDir].length; i++) {
+    for(let j = 0; j < this.squareCur.squareData[this.squareDir][0].length; j++) {
+      if(this.squareCur.squareData[this.squareDir][i][j] == 1) {
+        if(isBottom || (curY + i + 1 >= this.gameHeight) || (this.gameData[curY + i + 1][curX + j] == 2)) {
+          isBottom = true
+          break;
+        }
+      }
+    }
+    if(isBottom) {
+      break;
+    }
+  }
+  if(isBottom) {
+    for(let i = 0; i < this.squareCur.squareData[this.squareDir].length; i++) {
+      for(let j = 0; j < this.squareCur.squareData[this.squareDir][0].length; j++) {
+        if(this.squareCur.squareData[this.squareDir][i][j] == 1) {
+          this.gameData[curY + i][curX + j] = 2
+        }
+      }
+    }
+  }
+  return isBottom
 }
 
 this.Game = Game;
